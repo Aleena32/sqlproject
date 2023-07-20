@@ -1,0 +1,54 @@
+RETENTION PLOT QUERY
+CREATE TABLE "public.question"(
+-- id INTEGER,
+-- userId INT,
+-- total INT,
+-- created TIMESTAMP
+-- );
+
+
+-- COPY "public.question" FROM 'C:\Q1.csv' WITH CSV HEADER;
+-- SELECT * FROM "public"."public.question";
+
+
+-- drop table if exists Grouped;
+-- CREATE TABLE Grouped as 
+-- select userid,date(created) from "public"."public.question"
+-- group by userid,created order by userid
+-- select * from Grouped
+-- 
+
+-- drop table if exists Week
+-- create table Week AS
+-- select id,userId,total,date(created),date(date_trunc('week',created))as week_start
+-- FROM "public"."public.question" ;
+-- select * from Week
+
+-- drop table if exists Newcustomer
+-- create table Newcustomer as
+-- select userid,min(week_start) from Week
+-- group by userid order by min ;
+-- select * from Newcustomer 
+
+
+-- drop table if exists Final
+-- CREATE TABLE Final AS
+-- SELECT *,(date-min)/7 as weekdiff from Newcustomer as n JOIN Grouped as g using(userid)
+-- select * from Final 
+-- order by min,weekdiff
+
+select min, 
+COUNT(distinct case when weekdiff=0 then userid end) as week0,
+COUNT(distinct case when weekdiff=1 then userid end) as week1,
+COUNT(distinct case when weekdiff=2 then userid end) as week2,
+COUNT(distinct case when weekdiff=3 then userid end) as week3,
+COUNT(distinct case when weekdiff=4 then userid end) as week4,
+COUNT(distinct case when weekdiff=5 then userid end) as week5,
+COUNT(distinct case when weekdiff=6 then userid end) as week6,
+COUNT(distinct case when weekdiff=7 then userid end) as week7,
+COUNT(distinct case when weekdiff=8 then userid end) as week8,
+COUNT(distinct case when weekdiff=9 then userid end) as week9,
+COUNT(distinct case when weekdiff=10 then userid end) as week10
+from Final group by min
+order by 1
+
